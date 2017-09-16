@@ -1,0 +1,37 @@
+<html>
+  <head>
+    <title> Contact Manager </title>
+    <!-- css files -->
+    <link rel="stylesheet" href="css/contact_manager.css" />
+    <!-- js files -->
+    <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="js/contact_manager.js"></script>
+    <script type="text/javascript" src="js/contact.js"></script>
+  </head>
+  <body>
+    <div id="main">
+      <div id="data">
+        <label for="name"> Name: </label>
+        <input type="text" id="name" data-id="name" />
+        <label for="email"> Email: </label>
+        <input type="text" id="email" data-id="email" />
+        <button id="add" data-id="add"> ADD </button>
+
+        <!-- view buttons -->
+        <button id="grid" class="view" data-id="grid"> GRID VIEW </button>
+        <button id="list" class="view" data-id="list"> LIST VIEW </button>
+
+      </div>
+
+      <div id="search">
+        <label for="search"> Search: </label>
+        <input type="text" id="search" data-id="search" />
+      </div>
+
+    </div>
+
+    <div id="contact-container" data-id="contact-container">
+
+    </div>
+  </body>
+</html>

@@ -1,0 +1,35 @@
+#data {
+  margin-bottom: 10px;
+}
+
+#contact-container {
+  padding: 20px;
+}
+
+.contact{
+  height: 150px;
+  width: 200px;
+  border: 1px solid;
+  display: inline-block;
+  margin: 10px;
+  vertical-align: top;
+}
+
+.delete{
+  text-align: center;
+  margin-left: 50px;
+}
+
+.view {
+  margin-left: 20px;
+}
+
+.list {
+  border: 1px black solid;
+}
+
+.listElement {
+  border: 1px black solid;
+  width: 200px;
+  text-align: center;
+}
