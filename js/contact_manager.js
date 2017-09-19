@@ -31,8 +31,7 @@ ContactManager.prototype.bindClickEvent = function() {
   // delegate to all delete buttons
   this.$container.on( 'click', this.deleteButton, this.handleDeleteEvent() );
 
-  this.$gridButton.on('click',  this.handleChangeViewEvent() );
-  this.$listButton.on('click',  this.handleChangeViewEvent() );
+  this.$gridButton.add(this.$listButton).on('click',  this.handleChangeViewEvent() );
 };
 
 ContactManager.prototype.bindSearchEvent = function() {
@@ -43,8 +42,7 @@ ContactManager.prototype.bindSearchEvent = function() {
 };
 
 ContactManager.prototype.handleSearchEvent = function() {
-  this.filterContacts();
-  this.showContacts();
+  this.showFilteredContacts();
 };
 
 ContactManager.prototype.handleAddEvent = function() {
@@ -52,8 +50,7 @@ ContactManager.prototype.handleAddEvent = function() {
   return function() {
     _this.addContact();
     _this.clearData(); // clear previous data
-    _this.filterContacts();
-    _this.showContacts();
+    _this.showFilteredContacts();
   }
 };
 
@@ -64,8 +61,7 @@ ContactManager.prototype.handleDeleteEvent = function(contactId) {
   return function() {
     contactId = $(this).data('contactId');
     _this.deleteContact(contactId);
-    _this.filterContacts();
-    _this.showContacts();
+    _this.showFilteredContacts();
   }
 };
 
@@ -73,8 +69,7 @@ ContactManager.prototype.handleChangeViewEvent = function() {
   var _this = this;
   return function() {
     _this.view = $(this).data('id');
-    _this.filterContacts();
-    _this.showContacts();
+    _this.showFilteredContacts();
   }
 };
 
@@ -101,6 +96,11 @@ ContactManager.prototype.addContact = function() {
   } else {
     alert("Please enter valid data");
   };
+};
+
+ContactManager.prototype.showFilteredContacts = function() {
+  this.filterContacts();
+  this.showContacts();
 };
 
 ContactManager.prototype.showContacts = function() {
