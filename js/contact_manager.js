@@ -50,18 +50,17 @@ ContactManager.prototype.handleAddEvent = function() {
     _this.addContact();
     _this.clearData(); // clear previous data
     _this.showFilteredContacts();
-  }
+  };
 };
 
 ContactManager.prototype.handleDeleteEvent = function(contactId) {
   var _this = this,
       contactId = '';
-
   return function() {
     contactId = $(this).data('contactId');
     _this.deleteContact(contactId);
     _this.showFilteredContacts();
-  }
+  };
 };
 
 ContactManager.prototype.handleChangeViewEvent = function() {
@@ -91,7 +90,6 @@ ContactManager.prototype.addContact = function() {
     } else {
       alert("Email already in use");
     }
-
   } else {
     alert("Please enter valid data");
   };
