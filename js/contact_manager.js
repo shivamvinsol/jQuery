@@ -8,9 +8,11 @@ function ContactManager(options) {
   this.$container = options.$container;
 }
 
+ContactManager.prototype.emailRegex = /^[a-z0-9_\.]{2,25}@[a-z0-9]{2,15}\.[a-z]{2,3}$/i; // accepts xx@yyyyy.zzz
+
 ContactManager.prototype.initialize = function() {
+  this.deleteButton = '[data-id="deleteButton"]';
   this.view = 'grid'; // initially grid view
-  this.emailRegex = /^[a-z0-9_\.]{2,25}@[a-z0-9]{2,15}\.[a-z]{2,3}$/i; // accepts xx.yyyyy.zzz
   this.contacts = [];
   this.filteredContacts = [];
 
@@ -24,16 +26,14 @@ ContactManager.prototype.bindEvents = function() {
 
 ContactManager.prototype.bindClickEvent = function() {
   var _this = this;
-  this.$addButton.on('click', function() {_this.handleAddEvent();});
+  this.$addButton.on('click', this.handleAddEvent() );
 
-  this.$container.on( 'click', '[data-id="deleteButton"]', function() {
-    _this.handleDeleteEvent($(this).data('contactId'));
-  });
+  // delegate to all delete buttons
+  this.$container.on( 'click', this.deleteButton, this.handleDeleteEvent() );
 
-  this.$gridButton.on('click', function() {_this.handleChangeViewEvent($(this).data('id')); });
-  this.$listButton.on('click', function() {_this.handleChangeViewEvent($(this).data('id')); });
+  this.$gridButton.on('click',  this.handleChangeViewEvent() );
+  this.$listButton.on('click',  this.handleChangeViewEvent() );
 };
-
 
 ContactManager.prototype.bindSearchEvent = function() {
   var _this = this;
@@ -48,24 +48,35 @@ ContactManager.prototype.handleSearchEvent = function() {
 };
 
 ContactManager.prototype.handleAddEvent = function() {
-  this.addContact();
-  this.clearData(); // clear previous data
-  this.filterContacts();
-  this.showContacts();
-}
-
-ContactManager.prototype.handleDeleteEvent = function(contactId) {
-  this.deleteContact(contactId);
-  this.filterContacts();
-  this.showContacts();
+  var _this = this;
+  return function() {
+    _this.addContact();
+    _this.clearData(); // clear previous data
+    _this.filterContacts();
+    _this.showContacts();
+  }
 };
 
-ContactManager.prototype.handleChangeViewEvent = function(view) {
-  this.view = view;
-  this.filterContacts();
-  this.showContacts();
+ContactManager.prototype.handleDeleteEvent = function(contactId) {
+  var _this = this,
+      contactId = '';
 
-}
+  return function() {
+    contactId = $(this).data('contactId');
+    _this.deleteContact(contactId);
+    _this.filterContacts();
+    _this.showContacts();
+  }
+};
+
+ContactManager.prototype.handleChangeViewEvent = function() {
+  var _this = this;
+  return function() {
+    _this.view = $(this).data('id');
+    _this.filterContacts();
+    _this.showContacts();
+  }
+};
 
 ContactManager.prototype.addContact = function() {
   var isValidData = this.validateData(),
@@ -100,7 +111,6 @@ ContactManager.prototype.showContacts = function() {
   }
 };
 
-
 ContactManager.prototype.showContactsInGridView = function() {
   this.$container.empty();
 
@@ -120,7 +130,6 @@ ContactManager.prototype.showContactsInGridView = function() {
 
     $contactContainer.append($contactName, $contactEmail, $deleteButton);
     documentFragment.append($contactContainer[0]);
-
   });
 
   this.$container.append(documentFragment);
@@ -150,12 +159,10 @@ ContactManager.prototype.showContactsInListView = function() {
     $contactContainer.append($contactName, $contactEmail, $deleteButtonContainer);
     $list.append($contactContainer);
     documentFragment.append($list[0]);
-
   });
 
   this.$container.append(documentFragment);
 };
-
 
 ContactManager.prototype.validateData = function() {
   this.contactName = this.$name.val().trim();
@@ -197,10 +204,8 @@ ContactManager.prototype.deleteContact = function(contactId) {
 };
 
 ContactManager.prototype.filterContacts = function() {
-
   var _this = this;
   this.filteredContacts = [];
-
   this.searchText = this.$search.val();
 
   $.each(this.contacts, function() {
@@ -219,7 +224,7 @@ $(function() {
     $search: $('[data-id="search"]'),
     $container: $('[data-id="contact-container"]'),
     $grid : $('[data-id="grid"]'),
-    $list : $('[data-id="list"]')
+    $list : $('[data-id="list"]'),
   },
      contactManager = new ContactManager(options);
   contactManager.initialize();
