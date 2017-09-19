@@ -68,7 +68,7 @@ ContactManager.prototype.handleChangeViewEvent = function() {
   return function() {
     _this.view = $(this).data('id');
     _this.showFilteredContacts();
-  }
+  };
 };
 
 ContactManager.prototype.addContact = function() {
