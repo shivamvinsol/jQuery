@@ -25,24 +25,23 @@ ContactManager.prototype.bindEvents = function() {
 };
 
 ContactManager.prototype.bindClickEvent = function() {
-  var _this = this;
   this.$addButton.on('click', this.handleAddEvent() );
 
   // delegate to all delete buttons
-  this.$container.on( 'click', this.deleteButton, this.handleDeleteEvent() );
+  this.$container.on('click', this.deleteButton, this.handleDeleteEvent() );
 
   this.$gridButton.add(this.$listButton).on('click',  this.handleChangeViewEvent() );
 };
 
 ContactManager.prototype.bindSearchEvent = function() {
-  var _this = this;
-  this.$search.on('keyup', function() {
-    _this.handleSearchEvent();
-  });
+  this.$search.on('keyup', this.handleSearchEvent() );
 };
 
 ContactManager.prototype.handleSearchEvent = function() {
-  this.showFilteredContacts();
+  var _this = this;
+  return function() {
+     _this.showFilteredContacts();
+  };
 };
 
 ContactManager.prototype.handleAddEvent = function() {
