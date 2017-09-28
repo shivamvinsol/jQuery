@@ -13,6 +13,7 @@ ContactManager.prototype.emailRegex = /^[a-z0-9_\.]{2,25}@[a-z0-9]{2,15}\.[a-z]{
 ContactManager.prototype.initialize = function() {
   this.deleteButton = '[data-id="deleteButton"]';
   this.view = 'grid'; // initially grid view
+  this.lastContactId = 1;
   this.contacts = [];
   this.filteredContacts = [];
 
@@ -25,12 +26,12 @@ ContactManager.prototype.bindEvents = function() {
 };
 
 ContactManager.prototype.bindClickEvent = function() {
-  this.$addButton.on('click', this.handleAddEvent() );
+  this.$addButton.on('click', this.handleAddEvent());
 
   // delegate to all delete buttons
-  this.$container.on('click', this.deleteButton, this.handleDeleteEvent() );
+  this.$container.on('click', this.deleteButton, this.handleDeleteEvent());
 
-  this.$gridButton.add(this.$listButton).on('click',  this.handleChangeViewEvent() );
+  this.$gridButton.add(this.$listButton).on('click',  this.handleChangeViewEvent());
 };
 
 ContactManager.prototype.bindSearchEvent = function() {
@@ -82,11 +83,12 @@ ContactManager.prototype.addContact = function() {
 
     if (isUniqueEmail) {
       contact_data = {
-        id: this.contacts.length + 1,
+        id: this.lastContactId,
         name: this.contactName,
         email: this.contactEmail
       };
       this.contacts.push(new Contact(contact_data));
+      this.lastContactId += 1;
     } else {
       alert("Email already in use");
     }
@@ -118,7 +120,7 @@ ContactManager.prototype.showContactsInGridView = function() {
       $deleteButton = '' ;
 
   $.each(this.filteredContacts, function() {
-    $contactContainer = $('<div>').addClass('contact'),
+    $contactContainer = $('<div>').addClass('contact');
     $contactName = $('<p>').text("Name: " + this.name);
     $contactEmail = $('<p>').text("Email: " + this.email);
     $deleteButton = $('<button>', {'data-id': "deleteButton", 'data-contact-id': this.id})
@@ -136,7 +138,7 @@ ContactManager.prototype.showContactsInListView = function() {
   this.$container.empty();
 
   var documentFragment = document.createDocumentFragment(),
-      $list = $('<table>').addClass('list');
+      $list = $('<table>').addClass('list'),
       $contactContainer = '',
       $contactName = '',
       $contactEmail = '',
@@ -144,7 +146,7 @@ ContactManager.prototype.showContactsInListView = function() {
       $deleteButton = '' ;
 
   $.each(this.filteredContacts, function() {
-    $contactContainer = $('<tr>'),
+    $contactContainer = $('<tr>');
     $contactName = $('<td>').text(this.name).addClass('listElement');
     $contactEmail = $('<td>').text(this.email).addClass('listElement');
     $deleteButtonContainer = $('<td>').addClass('listElement');
